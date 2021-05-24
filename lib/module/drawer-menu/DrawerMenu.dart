@@ -1,6 +1,8 @@
+import 'package:e_billing/module/provider/ProviderPublic.dart';
 import 'package:e_billing/module/widget/Function.dart';
 import 'package:e_billing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DrawerMenu extends StatefulWidget {
   DrawerMenu({Key? key}) : super(key: key);
@@ -12,6 +14,9 @@ class DrawerMenu extends StatefulWidget {
 class _DrawerMenuState extends State<DrawerMenu> {
   @override
   Widget build(BuildContext context) {
+    int selectedIndexMenu =
+        Provider.of<ProviderPublic>(context).selectedMenuIndex;
+    print(selectedIndexMenu);
     return Scaffold(
         body: Container(
       width: MediaQuery.of(context).size.width,
@@ -53,33 +58,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
               ),
               //-----menu
               MenuItemWidget(
-                callback: (index) {
-                  zoomDrawerController.close!();
-                  homeKey.currentState!.setState(() {
-                    selectedIndexMenu = index;
-                  });
-                },
-                selected: selectedIndexMenu == 0,
                 item: MenuItem("Quotation", Icons.description, 0),
               ),
               MenuItemWidget(
-                callback: (index) {
-                  zoomDrawerController.close!();
-                  homeKey.currentState!.setState(() {
-                    selectedIndexMenu = index;
-                  });
-                },
-                selected: selectedIndexMenu == 1,
                 item: MenuItem("Customer", Icons.person, 1),
               ),
               MenuItemWidget(
-                callback: (index) {
-                  zoomDrawerController.close!();
-                  homeKey.currentState!.setState(() {
-                    selectedIndexMenu = index;
-                  });
-                },
-                selected: selectedIndexMenu == 2,
                 item: MenuItem("Settings", Icons.settings, 2),
               ),
               Spacer(),
@@ -121,7 +105,7 @@ class MenuItemWidget extends StatelessWidget {
   final Widget? widthBox;
   final TextStyle? style;
   final Function? callback;
-  final bool? selected;
+  // final bool? selected;
 
   final white = Colors.white;
 
@@ -130,16 +114,24 @@ class MenuItemWidget extends StatelessWidget {
     required this.item,
     this.widthBox,
     this.style,
-    required this.callback,
-    this.selected = false,
+    this.callback,
+    // this.selected = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => callback!(item!.index),
+      onPressed: () {
+        zoomDrawerController.close!();
+        Provider.of<ProviderPublic>(context, listen: false)
+            .setSelectedMenuIndex(item!.index);
+      },
       style: TextButton.styleFrom(
-        primary: selected! ? Color(0x44000000) : null,
+        backgroundColor:
+            Provider.of<ProviderPublic>(context).selectedMenuIndex ==
+                    item!.index
+                ? Colors.white.withOpacity(0.2)
+                : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,

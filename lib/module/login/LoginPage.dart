@@ -1,15 +1,16 @@
 import 'dart:convert';
-import 'package:e_billing/module/login-page/model/ModelLogin.dart';
-import 'package:e_billing/module/widget/Function.dart';
+import 'package:e_billing/module/login/model/ModelLogin.dart';
+import 'package:e_billing/module/provider/ProviderPublic.dart';
 import 'package:e_billing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:e_billing/module/widget/Api.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
 
-  Future<String> _authUser(LoginData data) async {
+  Future<String> _authUser(BuildContext context, LoginData data) async {
     print('Name: ${data.name}, Password: ${data.password}');
     String rtn = "Cannot Connect To Server";
     await API().postData(
@@ -17,7 +18,8 @@ class LoginPage extends StatelessWidget {
       data: {"username": data.name, "password": data.password},
       onComplete: (data, statusCode) {
         if (statusCode == 200) {
-          modelLogin = ModelLogin.fromJson(jsonDecode(data));
+          Provider.of<ProviderPublic>(context, listen: false)
+              .setModelLogin(ModelLogin.fromJson(jsonDecode(data)));
           rtn = "";
         } else {
           try {
@@ -42,9 +44,13 @@ class LoginPage extends StatelessWidget {
       title: 'E-Billing',
       logo: 'assets/images/logo.png',
       theme: LoginTheme(pageColorLight: Colors.green),
-      onLogin: _authUser,
+      onLogin: (logindata) {
+        _authUser(context, logindata);
+      },
       hideSignUpButton: true,
-      onSignup: _authUser,
+      onSignup: (logindata) {
+        _authUser(context, logindata);
+      },
       onSubmitAnimationCompleted: () {
         Navigator.of(context)
             .pushReplacementNamed(getRoutesName(RoutesName.homePage));

@@ -1,4 +1,4 @@
-import 'package:e_billing/module/custumer/CardCustomerList.dart';
+import 'package:e_billing/module/customer/widget/CardCustomerList.dart';
 import 'package:e_billing/module/widget/Function.dart';
 import 'package:flutter/material.dart';
 

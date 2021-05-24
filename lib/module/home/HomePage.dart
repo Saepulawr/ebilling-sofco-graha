@@ -1,7 +1,9 @@
 import 'package:e_billing/module/drawer-menu/DrawerMenu.dart';
+import 'package:e_billing/module/provider/ProviderPublic.dart';
 import 'package:e_billing/module/widget/Function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -25,7 +27,8 @@ class HomePageState extends State<HomePage> {
       closeCurve: Curves.fastOutSlowIn,
       style: DrawerStyle.Style1,
       menuScreen: DrawerMenu(),
-      mainScreen: pageMenu[selectedIndexMenu],
+      mainScreen:
+          pageMenu[Provider.of<ProviderPublic>(context).selectedMenuIndex],
     );
   }
 }

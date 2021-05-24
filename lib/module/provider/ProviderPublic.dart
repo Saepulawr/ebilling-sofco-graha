@@ -1,3 +1,4 @@
+import 'package:e_billing/module/login/model/ModelLogin.dart';
 import 'package:flutter/material.dart';
 
 class ProviderPublic extends ChangeNotifier {
@@ -7,4 +8,15 @@ class ProviderPublic extends ChangeNotifier {
     _selectedMenuIndex = num;
     notifyListeners();
   }
+
+  //login
+  late ModelLogin _modelLogin;
+  ModelLogin get modelLogin => _modelLogin;
+  void setModelLogin(ModelLogin modelLogin) {
+    _modelLogin = modelLogin;
+    notifyListeners();
+  }
+
+  //customer
+
 }
