@@ -1,4 +1,4 @@
-import 'package:e_billing/module/quotation/CardQuotationList.dart';
+import 'package:e_billing/module/quotation/widget/CardQuotationList.dart';
 import 'package:e_billing/module/widget/Function.dart';
 import 'package:flutter/material.dart';
 

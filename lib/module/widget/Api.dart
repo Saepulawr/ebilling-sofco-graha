@@ -5,6 +5,7 @@ const bool isDevelopment = true;
 const String API_HOST =
     isDevelopment ? "http://192.168.1.177/ebilling" : "http://localhost";
 const String API_KEY = "A6512FAF9A56402D4C5E3CC2AE97C803";
+String API_TOKEN = "";
 BaseOptions _options = new BaseOptions(
   connectTimeout: 30000,
   receiveTimeout: 30000,
@@ -12,8 +13,6 @@ BaseOptions _options = new BaseOptions(
 Dio _dio = new Dio(_options);
 
 class API {
-  String token = "";
-
   Future<void> postData(
       {required String url,
       Map<String, String>? header,
@@ -52,7 +51,7 @@ class API {
     onError(DioError error)?,
   }) async {
     if (header == null) header = {};
-    header.addAll({"X-Api-Key": API_KEY, "X-Token": token});
+    header.addAll({"X-Api-Key": API_KEY, "X-Token": API_TOKEN});
     print("GET\nURL : $url \nPARAMS : $params");
     try {
       Response response = await _dio.get(url,
@@ -80,7 +79,7 @@ class API {
       onSendProgress(int send, int total)?,
       onReceiveProgress(int receive, int total)?}) async {
     if (header == null) header = {};
-    header.addAll({"X-Api-Key": API_KEY, "X-Token": token});
+    header.addAll({"X-Api-Key": API_KEY, "X-Token": API_TOKEN});
     FormData formData = FormData.fromMap(data);
     if (file != null) {
       file.forEach((key, value) async {
