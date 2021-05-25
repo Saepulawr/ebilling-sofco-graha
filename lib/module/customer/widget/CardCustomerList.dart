@@ -1,9 +1,22 @@
+import 'package:e_billing/module/customer/model/ModelCustomerAll.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class CardCustomerList extends StatefulWidget {
-  CardCustomerList({Key? key}) : super(key: key);
+  final String name;
+  final String address;
+  final String pic;
+  final String email;
+  final String telp;
+  CardCustomerList(
+      {Key? key,
+      this.name = "",
+      this.address = "",
+      this.pic = "",
+      this.email = "",
+      this.telp = ""})
+      : super(key: key);
 
   @override
   _CardCustomerListState createState() => _CardCustomerListState();
@@ -29,39 +42,36 @@ class _CardCustomerListState extends State<CardCustomerList> {
                     Icons.person,
                     color: Colors.grey,
                   ),
-                  label: "Pak Joko Surahman",
+                  label: widget.pic,
                 ),
                 itemIcon(
                   icon: Icon(
                     Icons.email,
                     color: Colors.grey,
                   ),
-                  label: "joko@angindamai.com",
+                  label: widget.email,
                 ),
                 itemIcon(
                   icon: Icon(
                     Icons.phone,
                     color: Colors.grey,
                   ),
-                  label: "+62891111887887",
+                  label: widget.telp,
                 ),
               ],
             ),
           ),
           collapsed: Container(),
           header: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.indigoAccent,
-              child: Text('T'),
-              foregroundColor: Colors.white,
-            ),
-            title: itemIcon(
-                label: "PT Angin Damai",
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: itemIcon(
-                label:
-                    'Kp. Ciketing RT. 001/002 kelurahan. Sumur batu, RT.004/RW.002, kecamatan, Bantargebang, Kota Bks, Jawa Barat 17151'),
-          ),
+              leading: CircleAvatar(
+                backgroundColor: Colors.indigoAccent,
+                child: Text(widget.name[0]),
+                foregroundColor: Colors.white,
+              ),
+              title: itemIcon(
+                  label: widget.name,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: itemIcon(label: widget.address)),
         ),
         secondaryActions: <Widget>[
           IconSlideAction(

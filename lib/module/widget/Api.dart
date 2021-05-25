@@ -12,6 +12,11 @@ BaseOptions _options = new BaseOptions(
 );
 Dio _dio = new Dio(_options);
 
+class UrlApi {
+  String login = API_HOST + "/api/user/login";
+  String customer = API_HOST + "/api/t_customer/all";
+}
+
 class API {
   Future<void> postData(
       {required String url,
@@ -99,8 +104,4 @@ class API {
       if (onError != null) onError(e);
     }
   }
-}
-
-class UrlApi {
-  String login = API_HOST + "/api/user/login";
 }

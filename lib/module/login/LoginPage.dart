@@ -7,9 +7,14 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:e_billing/module/widget/Api.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
-  Duration get loginTime => Duration(milliseconds: 2250);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
 
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   Future<String> _authUser(BuildContext context, LoginData data) async {
     print('Name: ${data.name}, Password: ${data.password}');
     String rtn = "Cannot Connect To Server";
@@ -20,6 +25,9 @@ class LoginPage extends StatelessWidget {
         if (statusCode == 200) {
           Provider.of<ProviderPublic>(context, listen: false)
               .setModelLogin(ModelLogin.fromJson(jsonDecode(data)));
+
+          Navigator.of(context)
+              .pushReplacementNamed(getRoutesName(RoutesName.homePage));
           rtn = "";
         } else {
           try {
@@ -33,9 +41,16 @@ class LoginPage extends StatelessWidget {
 
   Future<String> _recoverPassword(String name) {
     print('Name: $name');
-    return Future.delayed(loginTime).then((_) {
+    return Future.delayed(Duration(seconds: 1)).then((_) {
       return "";
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _authUser(
+        context, LoginData(name: "sales1@ebilling.com", password: "password"));
   }
 
   @override
