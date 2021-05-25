@@ -16,7 +16,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   Widget build(BuildContext context) {
     int selectedIndexMenu =
         Provider.of<ProviderPublic>(context).selectedMenuIndex;
-    print(selectedIndexMenu);
+
     return Scaffold(
         body: Container(
       width: MediaQuery.of(context).size.width,

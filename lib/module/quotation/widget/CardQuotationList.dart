@@ -16,51 +16,15 @@ class _CardQuotationListState extends State<CardQuotationList> {
       child: Slidable(
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.25,
-        child: ExpandablePanel(
-          theme: ExpandableThemeData(
-              headerAlignment: ExpandablePanelHeaderAlignment.center),
-          expanded: Container(
-            padding: EdgeInsets.only(left: 70),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                itemIcon(
-                  icon: Icon(
-                    Icons.person,
-                    color: Colors.grey,
-                  ),
-                  label: "Pak Joko Surahman",
-                ),
-                itemIcon(
-                  icon: Icon(
-                    Icons.email,
-                    color: Colors.grey,
-                  ),
-                  label: "joko@angindamai.com",
-                ),
-                itemIcon(
-                  icon: Icon(
-                    Icons.phone,
-                    color: Colors.grey,
-                  ),
-                  label: "+62891111887887",
-                ),
-              ],
+        child: ListTile(
+            leading: Icon(
+              Icons.assignment,
             ),
-          ),
-          collapsed: Container(),
-          header: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.indigoAccent,
-              child: Text('T'),
-              foregroundColor: Colors.white,
-            ),
+            onTap: () {},
             title: itemIcon(
-                label: "PT Angin Damai",
+                label: "nama Pt",
                 style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: itemIcon(label: "21/02/2021"),
-          ),
-        ),
+            subtitle: itemIcon(label: "01/01/2021 - LCI0002348/x8uhh/3448")),
         secondaryActions: <Widget>[
           IconSlideAction(
             caption: 'Edit',
