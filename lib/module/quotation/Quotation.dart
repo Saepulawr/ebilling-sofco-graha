@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:e_billing/module/customer/model/ModelCustomerAll.dart';
 import 'package:e_billing/module/provider/ProviderPublic.dart';
+import 'package:e_billing/module/quotation/QuotationAdd.dart';
 import 'package:e_billing/module/quotation/widget/CardQuotationList.dart';
 import 'package:e_billing/module/widget/Api.dart';
 import 'package:e_billing/module/widget/Function.dart';
@@ -53,7 +54,6 @@ class _QuotationState extends State<Quotation> {
         foregroundColor: Colors.white,
         onPressed: () async {
           List<TCustomer> customers = [];
-          late TCustomer customer = TCustomer();
           if (Provider.of<ProviderPublic>(context, listen: false)
                   .modelCustomerAll
                   .total ==
@@ -80,10 +80,11 @@ class _QuotationState extends State<Quotation> {
                 .data!
                 .tCustomer!;
           }
-          SelectDialog.showModal<TCustomer>(
+          late TCustomer customerSelected;
+          await SelectDialog.showModal<TCustomer>(
             context,
             label: "Quotation for ?",
-            selectedValue: customer,
+            selectedValue: TCustomer(),
             items: customers,
             itemBuilder: (context, item, isSelected) {
               return Column(children: [
@@ -109,10 +110,17 @@ class _QuotationState extends State<Quotation> {
             },
             onChange: (TCustomer selected) {
               setState(() {
-                customer = selected;
+                customerSelected = selected;
               });
             },
           );
+          if (customerSelected != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => QuotationAdd(
+                customer: customerSelected,
+              ),
+            ));
+          }
         },
       ),
     );
