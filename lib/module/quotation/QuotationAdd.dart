@@ -658,7 +658,7 @@ class _QuotationAddState extends State<QuotationAdd> {
           "karyawan": jsonEmployee,
           "training": jsonTraining,
           "implementasi": jsonImplementation,
-          "modifikasi": jsonImplementation
+          "modifikasi": jsonModifikasi
         },
         onComplete: (data, statusCode) {
           if (statusCode == 200) {
