@@ -429,6 +429,18 @@ class _QuotationAddState extends State<QuotationAdd> {
                   ],
                 ),
               ),
+
+              Card(
+                child: _buildField(
+                    icon: Icon(CupertinoIcons.at),
+                    nameKey: "emailsales",
+                    label: "Email Sales",
+                    onChange: (v) => _hitung(),
+                    validator: (value) {
+                      if (value == null || value == "")
+                        return "Please input sales email";
+                    }),
+              ),
             ],
           ),
         ),
@@ -570,15 +582,16 @@ class _QuotationAddState extends State<QuotationAdd> {
     );
   }
 
-  Widget _buildField(
-      {required Icon icon,
-      required String nameKey,
-      String label = "Input Text",
-      String initialValue = "",
-      bool isDatePicker = false,
-      String? Function(String?)? validator,
-      void Function(String?)? onChange,
-      TextInputType textInputType = TextInputType.text}) {
+  Widget _buildField({
+    required Icon icon,
+    required String nameKey,
+    String label = "Input Text",
+    String initialValue = "",
+    bool isDatePicker = false,
+    String? Function(String?)? validator,
+    void Function(String?)? onChange,
+    TextInputType textInputType = TextInputType.text,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Row(
@@ -658,7 +671,8 @@ class _QuotationAddState extends State<QuotationAdd> {
           "karyawan": jsonEmployee,
           "training": jsonTraining,
           "implementasi": jsonImplementation,
-          "modifikasi": jsonModifikasi
+          "modifikasi": jsonModifikasi,
+          "emailsales": val['emailsales']
         },
         onComplete: (data, statusCode) {
           if (statusCode == 200) {
