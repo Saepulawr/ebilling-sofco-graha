@@ -621,7 +621,7 @@ class _QuotationAddState extends State<QuotationAdd> {
       Map<String, dynamic> val = _formKey.currentState!.value;
       String jsonEmployee = jsonEncode({
         "total_employee": val['detail_total_employes'],
-        "discount": val['detail_discount_employee'],
+        "discount": val['detail_discount_employes'],
         "desc": val['detail_desc_employes'],
         "price_total": _hargaPaketEmployee,
         "price_per_employee": _hargaperEmployee,

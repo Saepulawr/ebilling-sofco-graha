@@ -36,7 +36,7 @@ class _SettingsState extends State<Settings> {
               SettingsTile(
                 title: 'Company Address',
                 subtitle:
-                    'Kp. Ciketing RT. 001/002 kelurahan. Sumur batu, RT.004/RW.002, kecamatan, Bantargebang, Kota Bks, Jawa Barat 17151',
+                    'Kp. Ciketing RT. 001/002 kelurahan. Sumur batu, kecamatan, Bantargebang, Kota Bks, Jawa Barat 17151',
                 subtitleMaxLines: 3,
                 leading: Icon(Icons.place),
                 onPressed: (BuildContext context) {},

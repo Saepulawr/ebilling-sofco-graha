@@ -1,5 +1,9 @@
 import 'package:e_billing/module/customer/model/ModelCustomerAll.dart';
+import 'package:e_billing/module/quotation/Quotation.dart';
 import 'package:e_billing/module/quotation/model/ModelQuotationAll.dart';
+import 'package:e_billing/module/widget/Api.dart';
+import 'package:e_billing/module/widget/Function.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -18,17 +22,42 @@ class _CardQuotationListState extends State<CardQuotationList> {
       child: Slidable(
         actionPane: SlidableDrawerActionPane(),
         actionExtentRatio: 0.25,
-        child: ListTile(
-            leading: Icon(
-              Icons.assignment,
+        child: ExpandablePanel(
+          theme: ExpandableThemeData(
+              headerAlignment: ExpandablePanelHeaderAlignment.center),
+          collapsed: Container(),
+          expanded: Container(
+            // height: 30,
+            padding: EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Text("Password : "),
+                Text(getPasswordFromHash(widget.quotation.hashid!)),
+                Spacer(),
+                ElevatedButton.icon(
+                    onPressed: () {
+                      launchURL(urlViewInvoice(widget.quotation.hashid!));
+                    },
+                    icon: Icon(Icons.remove_red_eye),
+                    label: Text("View"))
+              ],
             ),
-            onTap: () {},
-            title: itemIcon(
-                label: widget.quotation.idCustomer!.nama!,
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: itemIcon(
-                label:
-                    "${widget.quotation.tanggal} - ${widget.quotation.nomor}")),
+          ),
+          header: ListTile(
+              leading: Icon(
+                widget.quotation.sign != null
+                    ? Icons.assignment_turned_in
+                    : Icons.assignment,
+                color:
+                    widget.quotation.sign != null ? Colors.green : Colors.blue,
+              ),
+              title: itemIcon(
+                  label: widget.quotation.idCustomer!.nama!,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: itemIcon(
+                  label:
+                      "${widget.quotation.tanggal} - ${widget.quotation.nomor}")),
+        ),
         secondaryActions: <Widget>[
           IconSlideAction(
             caption: 'Edit',

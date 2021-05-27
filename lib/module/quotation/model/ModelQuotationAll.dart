@@ -62,7 +62,9 @@ class TQuotation {
   String? training;
   String? implementasi;
   String? modifikasi;
-
+  String? hashid;
+  String? sign;
+  String? signdate;
   TQuotation(
       {this.id,
       this.tanggal,
@@ -88,6 +90,9 @@ class TQuotation {
     training = json['training'];
     implementasi = json['implementasi'];
     modifikasi = json['modifikasi'];
+    hashid = json['hashid'];
+    sign = json['sign'];
+    signdate = json['signdate'];
   }
 
   Map<String, dynamic> toJson() {

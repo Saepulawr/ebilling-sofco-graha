@@ -29,6 +29,7 @@ class _QuotationState extends State<Quotation>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
@@ -119,7 +120,15 @@ class _QuotationState extends State<Quotation>
                 customer: customerSelected,
               ),
             ));
-            print(result);
+            try {
+              if (result == "ok") {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Success"),
+                  backgroundColor: Colors.green,
+                ));
+                _handleRefresh();
+              }
+            } catch (e) {}
           }
         },
       ),
@@ -160,6 +169,7 @@ class _QuotationState extends State<Quotation>
       if (modelQuotationAll.total != null) {
         list = ListView.builder(
           itemBuilder: (context, index) {
+            // print(modelQuotationAll.data!.tQuotation![index].toJson());
             return CardQuotationList(
               quotation: modelQuotationAll.data!.tQuotation![index],
             );

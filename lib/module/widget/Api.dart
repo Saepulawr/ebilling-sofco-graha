@@ -11,6 +11,9 @@ BaseOptions _options = new BaseOptions(
   receiveTimeout: 30000,
 );
 Dio _dio = new Dio(_options);
+String urlViewInvoice(String hashid) {
+  return API_HOST + "/invoice/" + hashid;
+}
 
 class UrlApi {
   String login = API_HOST + "/api/user/login";
