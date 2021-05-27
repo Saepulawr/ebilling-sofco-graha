@@ -49,8 +49,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _authUser(
-        context, LoginData(name: "sales1@ebilling.com", password: "password"));
+    // _authUser(
+    //     context, LoginData(name: "sales1@ebilling.com", password: "password"));
   }
 
   @override
