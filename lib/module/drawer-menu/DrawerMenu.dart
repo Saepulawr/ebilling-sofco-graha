@@ -86,7 +86,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                     textStyle: TextStyle(color: Colors.white),
                   ),
                   onPressed: () => Navigator.of(context)
-                      .popAndPushNamed(getRoutesName(RoutesName.homePage)),
+                      .popAndPushNamed(getRoutesName(RoutesName.loginPage)),
                 ),
               ),
             ],

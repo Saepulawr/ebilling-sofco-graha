@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:e_billing/module/customer/model/ModelCustomerAll.dart';
 import 'package:e_billing/module/login/model/ModelLogin.dart';
 import 'package:e_billing/module/provider/ProviderPublic.dart';
+import 'package:e_billing/module/widget/Api.dart';
 import 'package:e_billing/module/widget/Function.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +31,9 @@ class _QuotationAddState extends State<QuotationAdd> {
   int _hargaPaketEmployee = 0;
   int _hargaperEmployee = 0;
   int _hargaSetelahDiskonEmployes = 0;
+  int _hargaTotalTraining = 0;
+  int _hargaTotalImplementation = 0;
+  int _hargaTotalModification = 0;
   @override
   Widget build(BuildContext context) {
     ModelLogin modelLogin = Provider.of<ProviderPublic>(context).modelLogin;
@@ -45,9 +50,6 @@ class _QuotationAddState extends State<QuotationAdd> {
           autovalidateMode: AutovalidateMode.always,
           child: Column(
             children: [
-              FormBuilderTextField(
-                name: "ee",
-              ),
               //company
               _buildCollapseGroup(
                 label: "Company",
@@ -151,6 +153,14 @@ class _QuotationAddState extends State<QuotationAdd> {
               ]),
               //detail
               _buildCollapseGroup(label: "Detail", children: [
+                //employee
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Employee",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
                 _buildField(
                     icon: Icon(CupertinoIcons.person_3_fill),
                     nameKey: "detail_total_employes",
@@ -168,7 +178,7 @@ class _QuotationAddState extends State<QuotationAdd> {
                     }),
                 _buildField(
                     icon: Icon(CupertinoIcons.percent),
-                    nameKey: "detail_dicount_employes",
+                    nameKey: "detail_discount_employes",
                     label: "Discount",
                     textInputType: TextInputType.number,
                     onChange: (value) {
@@ -184,6 +194,132 @@ class _QuotationAddState extends State<QuotationAdd> {
                   nameKey: "detail_desc_employes",
                   label: "Description",
                 ),
+                Divider(),
+                //training
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Training",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                _buildField(
+                    icon: Icon(CupertinoIcons.tag),
+                    nameKey: "detail_total_training",
+                    label: "Training Price",
+                    textInputType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          int.tryParse(value)! <= 0) {
+                        return "Please input > 0";
+                      }
+                    },
+                    onChange: (val) {
+                      _hitung();
+                    }),
+                _buildField(
+                    icon: Icon(CupertinoIcons.percent),
+                    nameKey: "detail_discount_training",
+                    label: "Discount",
+                    textInputType: TextInputType.number,
+                    onChange: (value) {
+                      _hitung();
+                    },
+                    validator: (value) {
+                      try {
+                        if (int.tryParse(value!)! > 100) return "Input Error!";
+                      } catch (e) {}
+                    }),
+                _buildField(
+                  icon: Icon(CupertinoIcons.list_bullet),
+                  nameKey: "detail_desc_training",
+                  label: "Description",
+                ),
+                Divider(),
+                //Implementation
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Implementation",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                _buildField(
+                    icon: Icon(CupertinoIcons.tag),
+                    nameKey: "detail_total_implementation",
+                    label: "Implementation Price",
+                    textInputType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          int.tryParse(value)! <= 0) {
+                        return "Please input > 0";
+                      }
+                    },
+                    onChange: (val) {
+                      _hitung();
+                    }),
+                _buildField(
+                    icon: Icon(CupertinoIcons.percent),
+                    nameKey: "detail_discount_implementation",
+                    label: "Discount",
+                    textInputType: TextInputType.number,
+                    onChange: (value) {
+                      _hitung();
+                    },
+                    validator: (value) {
+                      try {
+                        if (int.tryParse(value!)! > 100) return "Input Error!";
+                      } catch (e) {}
+                    }),
+                _buildField(
+                  icon: Icon(CupertinoIcons.list_bullet),
+                  nameKey: "detail_desc_implementation",
+                  label: "Description",
+                ),
+                Divider(),
+                //Modification
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Modification",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                _buildField(
+                    icon: Icon(CupertinoIcons.tag),
+                    nameKey: "detail_total_modification",
+                    label: "Modification Price",
+                    textInputType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          int.tryParse(value)! <= 0) {
+                        return "Please input > 0";
+                      }
+                    },
+                    onChange: (val) {
+                      _hitung();
+                    }),
+                _buildField(
+                    icon: Icon(CupertinoIcons.percent),
+                    nameKey: "detail_discount_modification",
+                    label: "Discount",
+                    textInputType: TextInputType.number,
+                    onChange: (value) {
+                      _hitung();
+                    },
+                    validator: (value) {
+                      try {
+                        if (int.tryParse(value!)! > 100) return "Input Error!";
+                      } catch (e) {}
+                    }),
+                _buildField(
+                  icon: Icon(CupertinoIcons.list_bullet),
+                  nameKey: "detail_desc_modification",
+                  label: "Description",
+                ),
               ]),
 
               //total
@@ -197,57 +333,96 @@ class _QuotationAddState extends State<QuotationAdd> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          "Price Total",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        Container(
-                          // width: _screen.width * 0.5,
-                          padding: EdgeInsets.only(left: 20),
-                          alignment: Alignment.centerRight,
+                        Expanded(
                           child: Text(
-                            formatCurrency.format(_hargaPaketEmployee),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            "Price Total",
+                            style: TextStyle(fontSize: 20),
                           ),
+                        ),
+                        Text(
+                          formatCurrency.format(_hargaPaketEmployee),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          "Price/employee",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        Container(
-                          // width: _screen.width * 0.5,
-                          padding: EdgeInsets.only(left: 20),
-                          alignment: Alignment.centerRight,
+                        Expanded(
                           child: Text(
-                            formatCurrency.format(_hargaperEmployee),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            "Price/employee",
+                            style: TextStyle(fontSize: 20),
                           ),
+                        ),
+                        Text(
+                          formatCurrency.format(_hargaperEmployee),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          "Price After Discount",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        Container(
-                          // width: _screen.width * 0.5,
-                          padding: EdgeInsets.only(left: 20),
-                          alignment: Alignment.centerRight,
+                        Expanded(
                           child: Text(
-                            formatCurrency.format(_hargaSetelahDiskonEmployes),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            "Price After Discount",
+                            style: TextStyle(fontSize: 20),
                           ),
+                        ),
+                        Text(
+                          formatCurrency.format(_hargaSetelahDiskonEmployes),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Total Training",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Text(
+                          formatCurrency.format(_hargaTotalTraining),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Total Implementation",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Text(
+                          formatCurrency.format(_hargaTotalImplementation),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Total Modification",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Text(
+                          formatCurrency.format(_hargaTotalModification),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -258,46 +433,50 @@ class _QuotationAddState extends State<QuotationAdd> {
           ),
         ),
       ),
-      bottomNavigationBar: RoundedLoadingButton(
-        borderRadius: 0,
-        // elevation: 0,
-        animateOnTap: false,
-        height: 80,
-        width: _screen.width,
+      bottomNavigationBar: Container(
         color: Theme.of(context).primaryColor,
-
-        child: Text('Generate',
-            style: TextStyle(color: Colors.white, fontSize: 20)),
-        controller: _btnController,
-        onPressed: () {
-          Future.delayed(Duration(seconds: 3), () => _btnController.success());
-        },
+        height: 80,
+        child: RoundedLoadingButton(
+          borderRadius: 0,
+          elevation: 0,
+          animateOnTap: false,
+          height: 80,
+          width: _screen.width,
+          color: Theme.of(context).primaryColor,
+          child: Text('Generate',
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          controller: _btnController,
+          onPressed: () {
+            _generate();
+          },
+        ),
       ),
     );
   }
 
   void _hitung() {
-    if (_formKey.currentState!.saveAndValidate()) {
-      Map<int, int> paketHargaEmployee = {
-        //hargapaket 500000 jika kurang dari 26 karyawan
-        // 25: 500000,
-        //jumlah employee : harga/karyawan
-        49: 20000,
-        199: 18000,
-        349: 15000,
-        499: 8500,
-        999: 7000,
-        // 10000: 5500,
-      };
-      int diskon = int.tryParse(_formKey
-              .currentState!.value['detail_dicount_employes']
-              .toString()) ??
-          0;
-      int totalEmployee = int.tryParse(_formKey
-              .currentState!.value['detail_total_employes']
-              .toString()) ??
-          0;
-      setState(() {
+    setState(() {
+      if (_formKey.currentState!.saveAndValidate()) {
+        // print(_formKey.currentState!.value);
+        Map<int, int> paketHargaEmployee = {
+          //hargapaket 500000 jika kurang dari 26 karyawan
+          // 25: 500000,
+          //jumlah employee : harga/karyawan
+          49: 20000,
+          199: 18000,
+          349: 15000,
+          499: 8500,
+          999: 7000,
+          // 10000: 5500,
+        };
+        int diskon = int.tryParse(_formKey
+                .currentState!.value['detail_discount_employes']
+                .toString()) ??
+            0;
+        int totalEmployee = int.tryParse(_formKey
+                .currentState!.value['detail_total_employes']
+                .toString()) ??
+            0;
         if (totalEmployee <= 25) {
           _hargaPaketEmployee = 500000;
           _hargaperEmployee = _hargaPaketEmployee ~/ totalEmployee;
@@ -315,21 +494,57 @@ class _QuotationAddState extends State<QuotationAdd> {
             if (totalEmployee <= a) {
               _hargaperEmployee = paketHargaEmployee[a]!;
               _hargaPaketEmployee = _hargaperEmployee * totalEmployee;
-              _hargaSetelahDiskonEmployes =
-                  (_hargaPaketEmployee - (_hargaPaketEmployee * (diskon / 100)))
-                      .toInt();
-              return;
+              _hargaSetelahDiskonEmployes = (_hargaPaketEmployee -
+                      (_hargaPaketEmployee * (diskon ~/ 100)))
+                  .toInt();
+              break;
             }
           }
         }
-      });
-    } else {
-      setState(() {
+
+        //training
+        diskon = int.tryParse(_formKey
+                .currentState!.value['detail_discount_training']
+                .toString()) ??
+            0;
+        print(diskon);
+        _hargaTotalTraining = int.tryParse(_formKey
+                .currentState!.value['detail_total_training']
+                .toString()) ??
+            0;
+        _hargaTotalTraining = _hargaTotalTraining -
+            (_hargaTotalTraining * (diskon / 100)).toInt();
+//implementation
+        diskon = int.tryParse(_formKey
+                .currentState!.value['detail_discount_implementation']
+                .toString()) ??
+            0;
+        _hargaTotalImplementation = int.tryParse(_formKey
+                .currentState!.value['detail_total_implementation']
+                .toString()) ??
+            0;
+        _hargaTotalImplementation = _hargaTotalImplementation -
+            (_hargaTotalImplementation * (diskon / 100)).toInt();
+//Modification
+        diskon = int.tryParse(_formKey
+                .currentState!.value['detail_discount_modification']
+                .toString()) ??
+            0;
+        _hargaTotalModification = int.tryParse(_formKey
+                .currentState!.value['detail_total_modification']
+                .toString()) ??
+            0;
+        _hargaTotalModification = _hargaTotalModification -
+            (_hargaTotalModification * (diskon / 100)).toInt();
+      } else {
         _hargaperEmployee = 0;
         _hargaPaketEmployee = 0;
         _hargaSetelahDiskonEmployes = 0;
-      });
-    }
+        _hargaTotalTraining = 0;
+        _hargaTotalImplementation = 0;
+        _hargaTotalModification = 0;
+      }
+    });
   }
 
   Widget _buildCollapseGroup(
@@ -399,5 +614,60 @@ class _QuotationAddState extends State<QuotationAdd> {
         ],
       ),
     );
+  }
+
+  Future<void> _generate() async {
+    if (_formKey.currentState!.saveAndValidate()) {
+      Map<String, dynamic> val = _formKey.currentState!.value;
+      String jsonEmployee = jsonEncode({
+        "total_employee": val['detail_total_employes'],
+        "discount": val['detail_discount_employee'],
+        "desc": val['detail_desc_employes'],
+        "price_total": _hargaPaketEmployee,
+        "price_per_employee": _hargaperEmployee,
+        "price_after_discount": _hargaSetelahDiskonEmployes
+      });
+      String jsonTraining = jsonEncode({
+        "total": val['detail_total_training'],
+        "discount": val['detail_discount_training'],
+        "desc": val['detail_desc_training'],
+        "price_total": _hargaTotalTraining,
+      });
+      String jsonImplementation = jsonEncode({
+        "total": val['detail_total_implementation'],
+        "discount": val['detail_discount_implementation'],
+        "desc": val['detail_desc_implementation'],
+        "price_total": _hargaTotalImplementation,
+      });
+      String jsonModifikasi = jsonEncode({
+        "total": val['detail_total_modification'],
+        "discount": val['detail_discount_modification'],
+        "desc": val['detail_desc_modification'],
+        "price_total": _hargaTotalImplementation,
+      });
+      await API().postData(
+        url: UrlApi().quotationGenerate,
+        data: {
+          "tanggal": val["date"],
+          "nomor": val['number'],
+          "id_user": Provider.of<ProviderPublic>(context, listen: false)
+              .modelLogin
+              .data!
+              .id!,
+          "id_customer": widget.customer.id,
+          "karyawan": jsonEmployee,
+          "training": jsonTraining,
+          "implementasi": jsonImplementation,
+          "modifikasi": jsonImplementation
+        },
+        onComplete: (data, statusCode) {
+          if (statusCode == 200) {
+            Navigator.of(context).pop("ok");
+          } else {
+            //error
+          }
+        },
+      );
+    }
   }
 }

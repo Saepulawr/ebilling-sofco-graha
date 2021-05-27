@@ -103,8 +103,12 @@ class _CustomerState extends State<Customer> with AfterLayoutMixin<Customer> {
           itemCount: modelCustomerAll.total,
         );
       } else {
-        list = Center(
-          child: Text("Failed Connect To Server!"),
+        list = SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height,
+            child: Text("Failed Connect To Server!"),
+          ),
         );
       }
     }

@@ -15,6 +15,8 @@ Dio _dio = new Dio(_options);
 class UrlApi {
   String login = API_HOST + "/api/user/login";
   String customer = API_HOST + "/api/t_customer/all";
+  String quotationGenerate = API_HOST + "/api/t_quotation/add";
+  String quotationGetAll = API_HOST + "/api/t_quotation/all";
 }
 
 class API {
@@ -28,8 +30,8 @@ class API {
       onReceiveProgress(int receive, int total)?}) async {
     if (header == null) header = {};
     if (data == null) data = {};
-    header.addAll({"X-Api-Key": API_KEY, "X-Token": API_KEY});
-    // print("POST\nURL : $url \nBODY : $data");
+    header.addAll({"X-Api-Key": API_KEY, "X-Token": API_TOKEN});
+    print("POST\nURL : $url \nBODY : $data");
     try {
       FormData formData = new FormData.fromMap(data);
       Response response = await _dio.post(url,
@@ -57,7 +59,7 @@ class API {
   }) async {
     if (header == null) header = {};
     header.addAll({"X-Api-Key": API_KEY, "X-Token": API_TOKEN});
-    print("GET\nURL : $url \nPARAMS : $params");
+    // print("GET\nURL : $url \nPARAMS : $params");
     try {
       Response response = await _dio.get(url,
           queryParameters: params,

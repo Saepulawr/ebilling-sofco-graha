@@ -1,8 +1,11 @@
+import 'package:e_billing/module/customer/model/ModelCustomerAll.dart';
+import 'package:e_billing/module/quotation/model/ModelQuotationAll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class CardQuotationList extends StatefulWidget {
-  CardQuotationList({Key? key}) : super(key: key);
+  final TQuotation quotation;
+  CardQuotationList({Key? key, required this.quotation}) : super(key: key);
 
   @override
   _CardQuotationListState createState() => _CardQuotationListState();
@@ -21,9 +24,11 @@ class _CardQuotationListState extends State<CardQuotationList> {
             ),
             onTap: () {},
             title: itemIcon(
-                label: "nama Pt",
+                label: widget.quotation.idCustomer!.nama!,
                 style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: itemIcon(label: "01/01/2021 - LCI0002348/x8uhh/3448")),
+            subtitle: itemIcon(
+                label:
+                    "${widget.quotation.tanggal} - ${widget.quotation.nomor}")),
         secondaryActions: <Widget>[
           IconSlideAction(
             caption: 'Edit',

@@ -1,5 +1,6 @@
 import 'package:e_billing/module/customer/model/ModelCustomerAll.dart';
 import 'package:e_billing/module/login/model/ModelLogin.dart';
+import 'package:e_billing/module/quotation/model/ModelQuotationAll.dart';
 import 'package:e_billing/module/widget/Api.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,14 @@ class ProviderPublic extends ChangeNotifier {
   ModelCustomerAll get modelCustomerAll => _modelCustomerAll;
   void setModelCustomerAll(ModelCustomerAll modelCustomerAll) {
     _modelCustomerAll = modelCustomerAll;
+    notifyListeners();
+  }
+
+  //quotation
+  late ModelQuotationAll _modelQuotationAll = ModelQuotationAll();
+  ModelQuotationAll get modelQuotationAll => _modelQuotationAll;
+  void setModelQuotationAll(ModelQuotationAll modelQuotationAll) {
+    _modelQuotationAll = modelQuotationAll;
     notifyListeners();
   }
 }

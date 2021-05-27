@@ -1,12 +1,16 @@
 import 'dart:convert';
+import 'package:after_layout/after_layout.dart';
 import 'package:e_billing/module/customer/model/ModelCustomerAll.dart';
 import 'package:e_billing/module/provider/ProviderPublic.dart';
 import 'package:e_billing/module/quotation/QuotationAdd.dart';
+import 'package:e_billing/module/quotation/model/ModelQuotationAll.dart';
 import 'package:e_billing/module/quotation/widget/CardQuotationList.dart';
 import 'package:e_billing/module/widget/Api.dart';
 import 'package:e_billing/module/widget/Function.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:select_dialog/select_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +21,10 @@ class Quotation extends StatefulWidget {
   _QuotationState createState() => _QuotationState();
 }
 
-class _QuotationState extends State<Quotation> {
+class _QuotationState extends State<Quotation>
+    with AfterLayoutMixin<Quotation> {
+  GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey = GlobalKey();
+  bool isLoading = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,15 +46,7 @@ class _QuotationState extends State<Quotation> {
         ],
         title: Text("Quotation"),
       ),
-      body: Container(
-        // color: Colors.amber,
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return CardQuotationList();
-          },
-          itemCount: 20,
-        ),
-      ),
+      body: _buildBody(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
@@ -115,14 +114,77 @@ class _QuotationState extends State<Quotation> {
             },
           );
           if (customerSelected != null) {
-            Navigator.of(context).push(MaterialPageRoute(
+            String result = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => QuotationAdd(
                 customer: customerSelected,
               ),
             ));
+            print(result);
           }
         },
       ),
     );
+  }
+
+  Future<void> _handleRefresh() async {
+    setState(() {
+      isLoading = true;
+    });
+    Provider.of<ProviderPublic>(context, listen: false)
+        .setModelQuotationAll(ModelQuotationAll());
+    await API().getData(
+      url: UrlApi().quotationGetAll,
+      onComplete: (data, statusCode) {
+        if (statusCode == 200) {
+          try {
+            Provider.of<ProviderPublic>(context, listen: false)
+                .setModelQuotationAll(
+                    ModelQuotationAll.fromJson(jsonDecode(data)));
+          } catch (e) {}
+        }
+      },
+    );
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Widget _buildBody() {
+    ModelQuotationAll modelQuotationAll =
+        Provider.of<ProviderPublic>(context).modelQuotationAll;
+    Widget list = Center(
+        child: SpinKitCubeGrid(
+      color: Theme.of(context).primaryColor,
+    ));
+    if (!isLoading) {
+      if (modelQuotationAll.total != null) {
+        list = ListView.builder(
+          itemBuilder: (context, index) {
+            return CardQuotationList(
+              quotation: modelQuotationAll.data!.tQuotation![index],
+            );
+          },
+          itemCount: modelQuotationAll.total,
+        );
+      } else {
+        list = SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height,
+            child: Text("Failed Connect To Server!"),
+          ),
+        );
+      }
+    }
+    return LiquidPullToRefresh(
+        key: _refreshIndicatorKey,
+        color: Theme.of(context).primaryColor,
+        onRefresh: _handleRefresh,
+        child: list);
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    _handleRefresh();
   }
 }
